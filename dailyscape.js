@@ -13,7 +13,6 @@ var totalWeeklyProfit = 0; //global for total weekly gathering profit
 
 var rs3daily = {
     "daily-challenge": {task: "Daily Challenge", url: "https://runescape.wiki/w/Challenge_System", short: true, desc: "Get xp"},
-    "soul-reaper": {task: "Soul Reaper", url: "https://runescape.wiki/w/Soul_Reaper", desc: "Kill assigned bosses for up to 300 points"},
     "player-owned-ports": {task: "Player Owned Ports", url: "https://runescape.wiki/w/Player-owned_port", short: true, desc: "Manage your player owned port<br>Buy resources from <a href=\"https://runescape.wiki/w/The_Black_Marketeer\" target=\"_blank\" rel=\"noreferrer noopener\">Black Marketeer</a>"},
     "player-owned-farm": {task: "Player Owned Farm", url: "https://runescape.wiki/w/Player-owned_farm", short: true, desc: "Manage your player owned farm"},
     "crystal-tree-blossom": {task: "Crystal Tree Blossom", url: "https://runescape.wiki/w/Crystal_tree_blossom", short: true, desc: "Collect crystal tree blossom for perfect plus potions"},
@@ -85,6 +84,7 @@ var rs3dailyshops = {
 };
 
 var rs3weekly = {
+    "soul-reaper": {task: "Soul Reaper", url: "https://runescape.wiki/w/Soul_Reaper", desc: "Kill assigned bosses for up to 300 points"},
     "thalmunds-wares": {task: "Thalmund's Wares", url: "https://runescape.wiki/w/Thalmund%27s_Wares", desc: "Merchant in City of Um"},
     "capping-clan-citadel": {task: "Capping Clan Citadel", url: "https://runescape.wiki/w/Clan_Citadel", desc: "Get skill xp, set xp bonus, make clan happy"},
     "charge-anachronia-totems": {task: "Charge Anachronia Totems", url: "https://runescape.wiki/w/Totem", desc: "Recharge totems weekly and optionally swap out"},
