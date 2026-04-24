@@ -1608,8 +1608,139 @@ const generateToken = function() {
     return btoa(JSON.stringify(items));
 }
 
+const getCustomTasks = function() {
+    try {
+        return JSON.parse(storage.getItem(profilePrefix + 'custom-tasks') ?? '[]');
+    } catch {
+        return [];
+    }
+};
+
+const saveCustomTasks = function(tasks) {
+    storage.setItem(profilePrefix + 'custom-tasks', JSON.stringify(tasks));
+};
+
+const createCustomTaskRow = function(task) {
+    let tr = document.createElement('tr');
+    tr.dataset.task = task.id;
+    tr.dataset.timeframe = 'rs3daily-custom';
+
+    let taskState = storage.getItem(profilePrefix + task.id) ?? 'false';
+    tr.dataset.completed = taskState;
+
+    let tdName = document.createElement('td');
+    tdName.className = 'activity_name';
+
+    let nameSpan = document.createElement('span');
+    nameSpan.className = 'custom-task-name';
+    nameSpan.textContent = task.name;
+
+    let deleteButton = document.createElement('button');
+    deleteButton.className = 'custom-task-delete btn btn-danger btn-sm active';
+    deleteButton.title = 'Delete custom task';
+    deleteButton.textContent = '✕';
+
+    tdName.appendChild(nameSpan);
+    tdName.appendChild(deleteButton);
+
+    let tdColor = document.createElement('td');
+    tdColor.className = 'activity_color';
+
+    let checkOff = document.createElement('span');
+    checkOff.className = 'activity_check_off';
+    checkOff.innerHTML = '☐';
+
+    let checkOn = document.createElement('span');
+    checkOn.className = 'activity_check_on';
+    checkOn.innerHTML = '☑';
+
+    let desc = document.createElement('span');
+    desc.className = 'activity_desc';
+    desc.innerHTML = '&nbsp;';
+
+    tdColor.appendChild(checkOff);
+    tdColor.appendChild(checkOn);
+    tdColor.appendChild(desc);
+
+    tr.appendChild(tdName);
+    tr.appendChild(tdColor);
+
+    return tr;
+};
+
+const attachCustomTaskRowListeners = function(tr) {
+    let tdColor = tr.querySelector('td.activity_color');
+    let deleteButton = tr.querySelector('button.custom-task-delete');
+
+    tdColor.addEventListener('click', function() {
+        let taskSlug = tr.dataset.task;
+        let newState = (tr.dataset.completed === 'true') ? 'false' : 'true';
+        tr.dataset.completed = newState;
+
+        if (newState === 'true') {
+            storage.setItem(profilePrefix + taskSlug, newState);
+        } else {
+            storage.removeItem(profilePrefix + taskSlug);
+        }
+    });
+
+    deleteButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        let taskId = tr.dataset.task;
+        let tasks = getCustomTasks();
+        tasks = tasks.filter(t => t.id !== taskId);
+        saveCustomTasks(tasks);
+        storage.removeItem(profilePrefix + taskId);
+        tr.remove();
+    });
+};
+
+const populateCustomTasks = function() {
+    let tasks = getCustomTasks();
+    let tbody = document.querySelector('#rs3daily_table tbody');
+
+    if (!tbody) return;
+
+    for (let task of tasks) {
+        let tr = createCustomTaskRow(task);
+        tbody.appendChild(tr);
+        attachCustomTaskRowListeners(tr);
+    }
+};
+
+const customTaskForm = function() {
+    let form = document.getElementById('rs3daily_custom_task_form');
+    let input = document.getElementById('rs3daily_custom_task_input');
+
+    if (!form || !input) return;
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        let taskName = input.value.trim();
+        if (!taskName) return;
+
+        let taskId = 'custom-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
+        let task = {id: taskId, name: taskName};
+
+        let tasks = getCustomTasks();
+        tasks.push(task);
+        saveCustomTasks(tasks);
+
+        let tbody = document.querySelector('#rs3daily_table tbody');
+        let tr = createCustomTaskRow(task);
+        tbody.appendChild(tr);
+        attachCustomTaskRowListeners(tr);
+
+        input.value = '';
+        input.focus();
+    });
+};
+
 window.onload = function() {
-    enableBootstrapTooltips();    
+    enableBootstrapTooltips();
     profiles();
     settings();
     layouts();
@@ -1638,6 +1769,8 @@ window.onload = function() {
     itemStatsTooltip();
     dndOfTheWeek();
     importExportModal();
+    populateCustomTasks();
+    customTaskForm();
 
     setInterval(function() {
         for (const timeFrame of timeframes) {
