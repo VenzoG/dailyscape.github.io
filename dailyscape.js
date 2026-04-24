@@ -1628,12 +1628,16 @@ const createCustomTaskRow = function(task) {
     let taskState = storage.getItem(profilePrefix + task.id) ?? 'false';
     tr.dataset.completed = taskState;
 
+    let slashIndex = task.name.indexOf('/');
+    let taskTitle = slashIndex !== -1 ? task.name.slice(0, slashIndex).trimEnd() : task.name;
+    let taskAction = slashIndex !== -1 ? task.name.slice(slashIndex + 1).trimStart() : '';
+
     let tdName = document.createElement('td');
     tdName.className = 'activity_name';
 
     let nameSpan = document.createElement('span');
     nameSpan.className = 'custom-task-name';
-    nameSpan.textContent = task.name;
+    nameSpan.textContent = taskTitle;
 
     let deleteButton = document.createElement('button');
     deleteButton.className = 'custom-task-delete btn btn-danger btn-sm active';
@@ -1656,7 +1660,7 @@ const createCustomTaskRow = function(task) {
 
     let desc = document.createElement('span');
     desc.className = 'activity_desc';
-    desc.innerHTML = '&nbsp;';
+    desc.textContent = taskAction || ' ';
 
     tdColor.appendChild(checkOff);
     tdColor.appendChild(checkOn);
