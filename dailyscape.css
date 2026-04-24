@@ -609,3 +609,75 @@ footer a img {
 .form-control[readonly] {
     color: #555
 }
+
+/* Custom task name - mirrors activity_name a positioning */
+.activity_table td.activity_name .custom-task-name {
+    color: #FFF;
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    padding: 1rem 4.25rem 1rem 1rem;
+    line-height: 1rem;
+    z-index: 1;
+}
+
+/* Custom task delete button - mirrors hide-button positioning */
+.activity_table td.activity_name button.custom-task-delete {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    display: none;
+    z-index: 120;
+}
+
+.activity_table tbody tr:hover td.activity_name button.custom-task-delete {
+    display: inline-block;
+}
+
+/* Compact mode adjustments for custom task name */
+.compact .activity_table td.activity_name .custom-task-name {
+    position: relative;
+}
+
+.compact .activity_table td.activity_name button.custom-task-delete {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+}
+
+/* Custom task add row at the bottom of the table */
+.activity_table tfoot .custom-task-add-row {
+    padding: 8px 12px;
+    background-color: transparent;
+    border-top: 1px solid #444;
+}
+
+.custom-task-form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.custom-task-input {
+    flex: 1;
+    max-width: 350px;
+    background-color: #2a2a2a;
+    border-color: #444;
+    color: #FFF;
+}
+
+.custom-task-input::placeholder {
+    color: #888;
+}
+
+.custom-task-input:focus {
+    background-color: #2a2a2a;
+    border-color: #6c757d;
+    color: #FFF;
+    box-shadow: 0 0 0 0.25rem rgba(108, 117, 125, 0.25);
+}
